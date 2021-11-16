@@ -31,9 +31,10 @@ public class MovingCube : MonoBehaviour
     internal void Stop()
     {
         moveSpeed = 0;
-        float hangOver = transform.position.z - LastCube.transform.position.z;
+        float hangOver = GetHangOver();
 
-        if (Mathf.Abs(hangOver) >= LastCube.transform.localScale.z)
+        float max = MoveDirection == MoveDirection.Z ? LastCube.transform.localScale.z : LastCube.transform.localScale.x;
+        if (Mathf.Abs(hangOver) >= max)
         {
             LastCube = null;
             CurrentCube = null;
@@ -41,8 +42,42 @@ public class MovingCube : MonoBehaviour
         }
 
         float direction = hangOver > 0 ? 1f : -1f;
-        SplitCubeOnZ(hangOver, direction);
+        if (MoveDirection == MoveDirection.Z) {
+            SplitCubeOnZ(hangOver, direction);
+        }
+        else
+        {
+            SplitCubeOnX(hangOver, direction);
+        }
         LastCube = this;
+    }
+
+    private float GetHangOver()
+    {
+        if (MoveDirection == MoveDirection.Z)
+        {
+            return transform.position.z - LastCube.transform.position.z;
+        }
+        else
+        {
+            return transform.position.x - LastCube.transform.position.x;
+        }
+    }
+
+    private void SplitCubeOnX(float hangOver, float direction)
+    {
+        float newSize = LastCube.transform.localScale.x - Math.Abs(hangOver);
+        float fallingBlockSize = transform.localScale.x - newSize;
+
+        float newXPosition = LastCube.transform.position.x + (hangOver / 2);
+
+        transform.localScale = new Vector3(newSize, transform.localScale.y, transform.localScale.z);
+        transform.position = new Vector3(newXPosition, transform.position.y, transform.position.z);
+
+        float cubeEdge = transform.position.x + (newSize / 2f * direction);
+        float fallingBlockXPosition = cubeEdge + fallingBlockSize / 2f * direction;
+
+        SpawnDropCube(fallingBlockXPosition, fallingBlockSize);
     }
     private void SplitCubeOnZ(float hangOver, float direction)
     {
@@ -63,10 +98,16 @@ public class MovingCube : MonoBehaviour
     private void SpawnDropCube(float fallingBlockZPosition, float fallingBlockSize)
     {
         var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        
-        cube.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, fallingBlockSize);
-        cube.transform.position = new Vector3(transform.position.x, transform.position.y, fallingBlockZPosition);
 
+        if (MoveDirection == MoveDirection.Z) {
+            cube.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, fallingBlockSize);
+            cube.transform.position = new Vector3(transform.position.x, transform.position.y, fallingBlockZPosition);
+        }
+        else
+        {
+            cube.transform.localScale = new Vector3(fallingBlockSize, transform.localScale.y, transform.localScale.z);
+            cube.transform.position = new Vector3(fallingBlockZPosition, transform.position.y, transform.position.z);
+        }
         cube.AddComponent<Rigidbody>();
         cube.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
         Destroy(cube.gameObject, 1f); ///change it
