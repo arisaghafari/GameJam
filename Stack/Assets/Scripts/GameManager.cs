@@ -9,12 +9,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             if (MovingCube.CurrentCube != null) {
-                MovingCube.LastCube = MovingCube.CurrentCube;
-                //MovingCube.CurrentCube.Stop();
-                MovingCube.LastCube.Stop();
+                MovingCube.CurrentCube.Stop();
             }
-            MovingCube.CurrentCube = FindObjectOfType<CubeSpawner>().SpawnCube();
-            MovingCube.CurrentCube.moveSpeed = 1f;
+            //MovingCube.CurrentCube =
+            FindObjectOfType<CubeSpawner>().SpawnCube();
+//            MovingCube.CurrentCube.moveSpeed = 1f;
+
         }
     }
 }
