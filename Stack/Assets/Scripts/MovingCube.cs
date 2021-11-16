@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class MovingCube : MonoBehaviour
 {
-    public static MovingCube CurrentCube { get; private set; }
-    public static MovingCube LastCube { get; private set; }
+    public static MovingCube CurrentCube { get;  set; }
+    public static MovingCube LastCube { get;  set; }
 
     [SerializeField]
-    private float moveSpeed = 1f;
+    public float moveSpeed = 1f;
 
     internal void Stop()
     {
@@ -43,9 +43,10 @@ public class MovingCube : MonoBehaviour
         cube.transform.position = new Vector3(transform.position.x, transform.position.y, fallingBlockZPosition);
 
         cube.AddComponent<Rigidbody>();
+        cube.GetComponent<Renderer>().material.color = GetComponent<Renderer>().material.color;
+        Destroy(cube.gameObject, 1f); ///change it
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -58,8 +59,19 @@ public class MovingCube : MonoBehaviour
             LastCube = GameObject.Find("Start").GetComponent<MovingCube>();
         }
         CurrentCube = this;
+
+        GetComponent<Renderer>().material.color = GetColor();
+        /*if (CurrentCube.moveSpeed == 0)
+        {
+            LastCube = CurrentCube;
+        }*/
     }
-    // Update is called once per frame
+
+    private Color GetColor()
+    {
+        return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f)); //change it
+    }
+
     private void Update()
     {
         transform.position += transform.forward * Time.deltaTime * moveSpeed;
