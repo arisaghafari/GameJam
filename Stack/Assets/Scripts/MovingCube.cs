@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,9 +10,13 @@ public class MovingCube : MonoBehaviour
     public static MovingCube CurrentCube { get;  private set; }
     public static MovingCube LastCube { get;  private set; }
     public MoveDirection MoveDirection { get; set; }
+    //private Color[] colors = { Color.green, Color.blue, Color.red, Color.black, Color.white};
+    
+    [SerializeField][Range(0f, 1f)] float lerpTime;
 
     [SerializeField]
     public float moveSpeed = 1f; //private bood
+
     private void OnEnable()
     {
         if (LastCube == null)
@@ -26,7 +31,8 @@ public class MovingCube : MonoBehaviour
     }
     private Color GetColor()
     {
-        return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f)); //change it
+        return Color.Lerp(Color.green, Color.blue, Mathf.PingPong(Time.time, 1f));
+   //     return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f));   
     }
     internal void Stop()
     {
