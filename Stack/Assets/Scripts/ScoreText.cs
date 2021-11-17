@@ -21,6 +21,6 @@ public class ScoreText : MonoBehaviour
     private void GameManager_OnCubeSpawned()
     {
         score++;
-        text.text = "Score: " + score;
+        text.text = score.ToString();
     }
 }

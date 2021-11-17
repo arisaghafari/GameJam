@@ -16,7 +16,10 @@ public class MovingCube : MonoBehaviour
 
     [SerializeField]
     public float moveSpeed = 1f; //private bood
-
+    private void Start()
+    {
+        Debug.Log("hi");
+    }
     private void OnEnable()
     {
         if (LastCube == null)
