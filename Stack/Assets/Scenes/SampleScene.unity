@@ -668,6 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60846f6233cb68b42945d029ec16b21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveD: 1
   lerpTime: 0
   moveSpeed: 0
 --- !u!1 &1777346198
@@ -834,6 +835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60846f6233cb68b42945d029ec16b21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveD: 1
   lerpTime: 1
   moveSpeed: 1
 --- !u!1 &2092743656

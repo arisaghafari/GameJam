@@ -10,16 +10,32 @@ public class MovingCube : MonoBehaviour
     public static MovingCube CurrentCube { get;  private set; }
     public static MovingCube LastCube { get;  private set; }
     public MoveDirection MoveDirection { get; set; }
-    //private Color[] colors = { Color.green, Color.blue, Color.red, Color.black, Color.white};
-    
+    public bool moveD = true;
+    private Color[] colors = { Color.green, Color.blue, Color.red, Color.black, Color.white};
+    private int s = 0;
+    private int d = 0;
+    private Color sc;
+    private Color dc;
+    private bool flag = true;
+
     [SerializeField][Range(0f, 1f)] float lerpTime;
 
     [SerializeField]
     public float moveSpeed = 1f; //private bood
-    private void Start()
+    /*private void Awake()
     {
+        //colors =  {Color.green, Color.blue, Color.red, Color.black, Color.white};
         Debug.Log("hi");
-    }
+        int sindex = UnityEngine.Random.Range(0, 5);
+        int dindex;
+        
+        if (sindex == 4)
+            dindex = 0;
+        else
+            dindex = sindex + 1;
+        s = colors[sindex];
+        d = colors[dindex];
+    }*/
     private void OnEnable()
     {
         if (LastCube == null)
@@ -34,7 +50,22 @@ public class MovingCube : MonoBehaviour
     }
     private Color GetColor()
     {
-        return Color.Lerp(Color.green, Color.blue, Mathf.PingPong(Time.time, 1f));
+        
+        if (flag)
+        {
+            Debug.Log("hi");
+            s = UnityEngine.Random.Range(0, 5);
+            if (s == 4)
+                d = 0;
+            else
+                d = s + 1;
+            flag = false;
+            sc = colors[s];
+            dc = colors[d];
+        }
+        //Debug.Log("sindex : " + sc);
+        //Debug.Log("dindex : " + dc);
+        return Color.Lerp(Color.blue, Color.red, Mathf.PingPong(Time.time, 1f));
    //     return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f));   
     }
     internal void Stop()
@@ -127,11 +158,34 @@ public class MovingCube : MonoBehaviour
         //if (MoveDirection == MoveDirection.Z)
         if (MoveDirection == MoveDirection.Z)
         {
-            transform.position += transform.forward * Time.deltaTime * moveSpeed;
+            if (moveD)
+                transform.position += transform.forward * Time.deltaTime * moveSpeed;
+            else
+                transform.position -= transform.forward * Time.deltaTime * moveSpeed;
+            if (transform.position.z >= 1.82)
+            {
+                moveD = false;
+            }
+            if (transform.position.z <= -1.82)
+            {
+                moveD = true;
+            }
+
         }
         else
         {
-            transform.position += transform.right * Time.deltaTime * moveSpeed;
+            if(moveD)
+                transform.position += transform.right * Time.deltaTime * moveSpeed;
+            else
+                transform.position -= transform.right * Time.deltaTime * moveSpeed;
+            if (transform.position.x >= 1.82)
+            {
+                moveD = false;
+            }
+            if (transform.position.x <= -1.82)
+            {
+                moveD = true;
+            }
         }
     }
 }

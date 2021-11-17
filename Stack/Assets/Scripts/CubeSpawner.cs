@@ -24,6 +24,7 @@ public class CubeSpawner : MonoBehaviour
             cube.transform.position = transform.position;
         }
         cube.moveSpeed = 1f;
+        //cube.moveD = true;
 
         cube.MoveDirection = moveDirection;
     }
