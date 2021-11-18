@@ -18,6 +18,8 @@ public class MovingCube : MonoBehaviour
     private Color dc;
     private bool flag = true;
 
+    private AudioSource source;
+    
     [SerializeField][Range(0f, 1f)] float lerpTime;
 
     [SerializeField]
@@ -44,6 +46,7 @@ public class MovingCube : MonoBehaviour
         }
         CurrentCube = this;
 
+        source = GetComponent<AudioSource>();
         GetComponent<Renderer>().material.color = GetColor();
 
         transform.localScale = new Vector3(LastCube.transform.localScale.x, transform.localScale.y, LastCube.transform.localScale.z);
@@ -71,6 +74,9 @@ public class MovingCube : MonoBehaviour
     internal void Stop()
     {
         moveSpeed = 0;
+        //if (GameObject.Find("Start").GetComponent<MovingCube>() != LastCube)
+        source.Play();
+
         float hangOver = GetHangOver();
 
         float max = MoveDirection == MoveDirection.Z ? LastCube.transform.localScale.z : LastCube.transform.localScale.x;
